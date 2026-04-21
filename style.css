@@ -1,286 +1,171 @@
-﻿/* style.css - Complete System Styles */
+﻿/* style.css - Professional Sporty Polish */
 
 :root {
-    /* Colors */
-    --primary-color: #2c3e50;
-    --primary-light: #34495e;
-    --secondary-color: #3498db;
-    --secondary-hover: #2980b9;
-    --accent-color: #4361ee;
-    --success-color: #28a745;
-    --error-color: #e74c3c;
-    --error-hover: #c0392b;
-    --bg-color: #f0f4f8;
-    --card-bg: #ffffff;
-    --text-main: #2d3436;
-    --text-muted: #636e72;
-    --text-light: #ecf0f1;
-    --border-color: #dfe6e9;
+    /* Color Palette - Deep Navy & Vibrant Cyan (High-end Sports feel) */
+    --primary: #0f172a;       /* Deepest Navy */
+    --primary-alt: #1e293b;   /* Slate Blue */
+    --accent: #06b6d4;        /* Vibrant Cyan */
+    --accent-glow: rgba(6, 182, 212, 0.15);
+    --success: #10b981;
+    --error: #f43f5e;
+    --bg-main: #f8fafc;
+    --surface: #ffffff;
+    --text-head: #0f172a;
+    --text-body: #475569;
+    --text-mute: #94a3b8;
+    --border: #e2e8f0;
 
-    /* Spacing */
-    --space-xs: 4px;
-    --space-sm: 8px;
-    --space-md: 16px;
-    --space-lg: 24px;
-    --space-xl: 32px;
-
-    /* Effects */
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --shadow-sm: 0 2px 5px rgba(0,0,0,0.05);
-    --shadow-md: 0 4px 15px rgba(0,0,0,0.1);
-    --transition: all 0.25s ease-out;
+    /* Spacing & Sizing */
+    --radius-full: 9999px;
+    --radius-lg: 16px;
+    --radius-md: 10px;
+    --radius-sm: 6px;
+    --shadow-subtle: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-elevated: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* --- 1. GLOBAL & RESET --- */
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
 body { 
-    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif; 
-    background-color: var(--bg-color);
-    color: var(--text-main);
-    margin: 0; 
-    padding: 0; 
-    line-height: 1.5;
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif; 
+    background-color: var(--bg-main);
+    color: var(--text-body);
+    margin: 0; padding: 0; line-height: 1.6;
 }
 
 .container {
-    max-width: 1100px;
-    margin: var(--space-xl) auto;
-    padding: 0 var(--space-md);
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
 }
 
-/* --- 2. NAVIGATION (Modern) --- */
+/* --- Navigation --- */
 .navbar {
-    background-color: var(--primary-color);
-    height: 72px;
+    background: var(--primary);
+    height: 80px;
+    padding: 0 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 5%;
-    box-shadow: var(--shadow-sm);
     position: sticky;
-    top: 0;
-    z-index: 100;
+    top: 0; z-index: 1000;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
 .brand {
     color: white;
-    font-size: 22px;
-    font-weight: 700;
+    font-size: 1.5rem;
+    font-weight: 800;
     text-decoration: none;
-    letter-spacing: -0.5px;
+    display: flex; align-items: center; gap: 10px;
+    text-transform: uppercase; letter-spacing: -1px;
 }
 
-.nav-links {
-    display: flex;
-    align-items: center;
-    gap: var(--space-lg);
+.brand::before {
+    content: ""; display: block; width: 32px; height: 32px;
+    background: var(--accent); border-radius: 8px;
 }
 
+.nav-links { display: flex; gap: 2rem; align-items: center; }
 .nav-links a {
-    color: var(--text-light);
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 500;
+    color: #cbd5e1; text-decoration: none; font-size: 0.95rem; font-weight: 600;
     transition: var(--transition);
-    opacity: 0.9;
 }
-.nav-links a:hover { 
-    color: white;
-    opacity: 1;
-}
+.nav-links a:hover, .nav-links a.active-link { color: white; }
 
 .btn-logout {
-    background-color: var(--error-color);
-    padding: 8px 18px;
+    background: rgba(244, 63, 94, 0.1);
+    color: var(--error) !important;
+    padding: 0.5rem 1.25rem;
     border-radius: var(--radius-sm);
-    font-weight: 600;
-    color: white !important;
-    transition: var(--transition);
+    border: 1px solid rgba(244, 63, 94, 0.2);
+    font-size: 0.9rem;
 }
-.btn-logout:hover { 
-    background-color: var(--error-hover);
-    transform: translateY(-1px);
-}
+.btn-logout:hover { background: var(--error); color: white !important; }
 
-/* --- 4. DASHBOARD & CARDS --- */
+/* --- Components --- */
 .welcome-card {
-    background: var(--card-bg);
-    padding: var(--space-xl);
+    background: var(--surface);
+    padding: 2.5rem;
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    margin-bottom: var(--space-lg);
-    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-subtle);
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+    position: relative; overflow: hidden;
 }
 
-.welcome-card h2 {
-    margin: 0 0 var(--space-sm) 0;
-    color: var(--primary-color);
-    font-size: 28px;
-    letter-spacing: -0.5px;
+.welcome-card::after {
+    content: ""; position: absolute; top: 0; right: 0; width: 150px; height: 150px;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
 }
 
-.user-details {
-    display: flex;
-    gap: var(--space-md);
-    color: var(--text-muted);
-    font-size: 14px;
-    margin-top: var(--space-md);
-    padding-top: var(--space-md);
-    border-top: 1px solid var(--border-color);
-}
+.welcome-card h2 { margin: 0; font-size: 2.25rem; color: var(--text-head); font-weight: 800; }
+.user-details { margin-top: 1.5rem; display: flex; gap: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; font-size: 0.9rem; font-weight: 600; color: var(--text-head); }
 
-.grid-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--space-lg);
-    margin-bottom: var(--space-xl);
-}
+.grid-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
 
 .action-card {
-    background: var(--card-bg);
-    padding: var(--space-xl);
+    background: var(--surface);
+    padding: 2.5rem;
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
     text-align: center;
     transition: var(--transition);
-    border: 1px solid var(--border-color);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
-.action-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--secondary-color);
-}
-
-.action-card h3 {
-    color: var(--primary-color);
-    margin: 0 0 var(--space-sm) 0;
-    font-size: 20px;
-}
-
-.action-card p {
-    color: var(--text-muted);
-    font-size: 15px;
-    margin-bottom: var(--space-lg);
-    flex-grow: 1;
-}
+.action-card:hover { transform: translateY(-8px); border-color: var(--accent); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+.action-card h3 { color: var(--text-head); font-size: 1.5rem; font-weight: 800; margin-bottom: 0.75rem; }
+.action-card p { color: var(--text-body); font-size: 1rem; margin-bottom: 2rem; }
 
 .btn-blue {
-    background-color: var(--secondary-color);
+    background: var(--primary);
     color: white;
-    padding: 10px 24px;
+    padding: 0.875rem 2rem;
+    border-radius: var(--radius-md);
+    font-weight: 700;
     text-decoration: none;
-    border-radius: var(--radius-sm);
-    font-weight: 600;
-    font-size: 15px;
-    transition: var(--transition);
     display: inline-block;
+    transition: var(--transition);
+    border: 1px solid transparent;
 }
-.btn-blue:hover { 
-    background-color: var(--secondary-hover);
-    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
-}
+.btn-blue:hover { background: var(--accent); transform: scale(1.05); }
 
-/* --- 11. LOGIN PAGE --- */
-body.login-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: var(--bg-color);
+/* --- Table Styles --- */
+.schedule-table {
+    width: 100%; border-collapse: separate; border-spacing: 2px;
+    border-radius: var(--radius-md); overflow: hidden; margin-top: 1.5rem;
 }
+.schedule-table th { background: var(--primary); color: white; padding: 1rem 0.5rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
+.schedule-table td { background: white; border: 1px solid var(--border); transition: var(--transition); height: 50px; }
 
+.status-booked { background: var(--primary-alt) !important; position: relative; }
+.status-available:hover { background: var(--accent-glow) !important; cursor: pointer; border-color: var(--accent); }
+
+/* --- Login --- */
+body.login-page { background: var(--primary); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
 .login-card {
-    background: var(--card-bg);
-    padding: var(--space-xl);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    width: 100%;
-    max-width: 420px;
-    text-align: center;
-    border: 1px solid var(--border-color);
-}
-
-.login-logo img {
-    border-radius: 50%;
-    margin-bottom: var(--space-md);
-    box-shadow: var(--shadow-sm);
+    background: var(--surface);
+    padding: 3rem;
+    border-radius: 24px;
+    width: 100%; max-width: 440px;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.5);
 }
 
 .login-input {
-    width: 100%;
-    padding: 14px;
-    margin-bottom: var(--space-md);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    font-size: 15px;
-    background-color: #fcfcfc;
-    transition: var(--transition);
+    width: 100%; padding: 1rem; margin-bottom: 1.25rem;
+    background: #f1f5f9; border: 2px solid transparent; border-radius: var(--radius-md);
+    font-size: 1rem; font-weight: 500; transition: var(--transition);
 }
-.login-input:focus {
-    border-color: var(--secondary-color);
-    outline: none;
-    background-color: white;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-}
+.login-input:focus { outline: none; border-color: var(--accent); background: white; }
 
 .login-btn {
-    width: 100%;
-    padding: 14px;
-    background: var(--secondary-color);
-    color: white;
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
+    width: 100%; padding: 1rem; background: var(--accent); color: white;
+    border: none; border-radius: var(--radius-md); font-size: 1.1rem; font-weight: 800; cursor: pointer;
     transition: var(--transition);
 }
-.login-btn:hover { 
-    background: var(--secondary-hover);
-    transform: translateY(-1px);
-}
+.login-btn:hover { background: #0891b2; transform: translateY(-2px); }
 
-/* --- 10. AVAILABILITY GRID --- */
-.schedule-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin-top: var(--space-md);
-    background: white;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-}
-
-.schedule-table th { 
-    background: var(--primary-color);
-    color: white;
-    padding: 12px;
-    font-weight: 600;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.schedule-table td { 
-    border-right: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-    padding: 10px;
-    height: 44px;
-}
-
-.status-booked { background-color: var(--primary-color); border-color: rgba(255,255,255,0.1); }
-.status-available { background-color: white; transition: var(--transition); }
-.status-available:hover { background-color: var(--bg-color); cursor: pointer; }
-
-/* LEGACY & HELPERS (Keep for compatibility) */
-.logout-btn { @extend .btn-logout; }
+/* Helpers */
+.hero-banner { width: 100%; border-radius: var(--radius-lg); margin-bottom: 2rem; object-fit: cover; height: 300px; border: 1px solid var(--border); }
