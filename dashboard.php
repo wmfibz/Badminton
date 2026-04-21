@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // dashboard.php
 require_once 'db_connect.php';
 session_start();
@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id'])) {
 // 2. Fetch User Data
 $user_id = $_SESSION['user_id'];
 // We select username and phone_number based on your database columns
-$stmt = $conn->prepare("SELECT username, full_name, phone_number, role FROM users WHERE user_id = ?");
+$stmt = $conn->prepare("SELECT username, full_name, phone_number, role FROM users WHERE user_id = ?");    
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -26,7 +26,7 @@ if (!$user) {
 
 // Fetch Availability Data for today
 $today = date('Y-m-d');
-$booked_slots = []; 
+$booked_slots = [];
 $sql_avail = "SELECT court_id, start_time, end_time FROM bookings WHERE booking_date = '$today'";
 $res_avail = $conn->query($sql_avail);
 while ($row = $res_avail->fetch_assoc()) {
@@ -46,16 +46,32 @@ while ($row = $res_avail->fetch_assoc()) {
     <title>Dashboard - BookMyCourt</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css?v=<?php echo time(); ?>">
+    <style>
+        .live-badge { 
+            background: #e74c3c; color: white; padding: 4px 10px; border-radius: 4px; 
+            font-size: 11px; font-weight: bold; text-transform: uppercase; margin-right: 10px;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+        .hero-banner {
+            width: 100%; height: 200px; object-fit: cover; border-radius: var(--radius-lg);
+            margin-bottom: var(--space-lg); border: 1px solid var(--border-color);
+        }
+    </style>
 </head>
 <body>
 
     <nav class="navbar">
         <a href="dashboard.php" class="brand">BookMyCourt</a>
         <div class="nav-links">
-            <a href="dashboard.php">Dashboard</a>
+            <a href="dashboard.php" class="active-link">Dashboard</a>
             <a href="availability.php">Live Availability</a>
             <?php if(isset($_SESSION['role']) && $_SESSION['role'] == 'admin'): ?>
-                <a href="admin_courts.php">Manage Courts</a>
+                <a href="admin_courts.php">Courts</a>
                 <a href="admin_bookings.php">All Bookings</a>
             <?php else: ?>
                 <a href="book.php">Book Court</a>
@@ -67,23 +83,20 @@ while ($row = $res_avail->fetch_assoc()) {
     </nav>
 
     <div class="container">
-	
+
         <div class="welcome-card">
             <h2>Welcome, <?php echo htmlspecialchars($user['full_name']); ?>!</h2>
-            <p style="color:#666;">Manage your badminton court bookings with ease.</p>
+            <p style="color:var(--text-muted); margin-bottom: var(--space-md);">Manage your badminton court bookings with ease.</p>
             <div class="user-details">
-                <strong>Email:</strong> <?php echo htmlspecialchars($user['username']); ?> 
-                <span style="margin:0 10px; color:#ccc;">|</span> 
-                <strong>Phone:</strong> <?php echo htmlspecialchars($user['phone_number']); ?>
+                <span><strong>Email:</strong> <?php echo htmlspecialchars($user['username']); ?></span>
+                <span><strong>Phone:</strong> <?php echo htmlspecialchars($user['phone_number']); ?></span>
             </div>
         </div>
 
-	<div class="welcome-card"><center>
-	<img src="badminton1.jpg" alt="Badminton" width="630" height="150">
-	</center></div>
+        <img src="badminton1.jpg" alt="Badminton Hero" class="hero-banner">
 
-        <?php if ($user['role'] == 'admin'): ?>
-            <div class="grid-row">
+        <div class="grid-row">
+            <?php if ($user['role'] == 'admin'): ?>
                 <div class="action-card">
                     <h3>Manage Courts</h3>
                     <p>Add, edit price, or delete badminton courts.</p>
@@ -94,45 +107,44 @@ while ($row = $res_avail->fetch_assoc()) {
                     <p>View all bookings from every member.</p>
                     <a href="admin_bookings.php" class="btn-blue">View Data</a>
                 </div>
-                <div class="action-card">
-                    <h3>Live Availability</h3>
-                    <p>Check court status and <br> real-time bookings.</p>
-                    <a href="availability.php" class="btn-blue">Check Now</a>
-                </div>
-            </div>
-
-        <?php else: ?>
-            <div class="grid-row">
+            <?php else: ?>
                 <div class="action-card">
                     <h3>Book a Court</h3>
-                    <p>Reserve a badminton court for your <br> next game.</p>
+                    <p>Reserve a badminton court for your next game.</p>
                     <a href="book.php" class="btn-blue">Book Now</a>
                 </div>
 
                 <div class="action-card">
                     <h3>My Bookings</h3>
-                    <p>View, edit, or cancel your existing <br> bookings.</p>
-                    <a href="my_bookings.php" class="btn-blue">Manage</a>
+                    <p>View, edit, or cancel your existing bookings.</p>
+                    <a href="my_bookings.php" class="btn-blue">Manage My Bookings</a>
                 </div>
+            <?php endif; ?>
 
-                <div class="action-card">
-                    <h3>Edit Profile</h3>
-                    <p>Update your personal information.</p>
-                    <a href="edit_profile.php" class="btn-blue">Edit</a>
-                </div>
+            <div class="action-card">
+                <h3>Live Availability</h3>
+                <p>Check court status and real-time bookings.</p>
+                <a href="availability.php" class="btn-blue">Check Availability</a>
             </div>
-        <?php endif; ?>
+        </div>
 
         <!-- Live Court Status Section -->
-        <div class="welcome-card" style="margin-top: 30px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 style="margin:0; color: #2c3e50;">Live Court Status (Today)</h3>
-                <a href="availability.php" style="font-size: 0.9em; color: #3498db; text-decoration: none; font-weight: bold;">View Full Schedule &rarr;</a>
-			</div>
-            
-            <div class="legend">
-                <div class="legend-item"><div class="box white"></div> Available</div>
-                <div class="legend-item"><div class="box blue"></div> Booked</div>
+        <div class="welcome-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md);">
+                <div style="display: flex; align-items: center;">
+                    <span class="live-badge">Live</span>
+                    <h3 style="margin:0; color: var(--primary-color);">Today's Court Status</h3>
+                </div>
+                <a href="availability.php" style="font-size: 0.9em; color: var(--secondary-color); text-decoration: none; font-weight: 700;">View Full Schedule &rarr;</a>
+            </div>
+
+            <div class="legend" style="margin-bottom: var(--space-md);">
+                <div class="legend-item" style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-muted);">
+                    <div class="box white" style="width:12px; height:12px; border:1px solid #ddd;"></div> Available
+                </div>
+                <div class="legend-item" style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-muted); margin-left: 20px;">
+                    <div class="box blue" style="width:12px; height:12px; background:var(--primary-color);"></div> Booked
+                </div>
             </div>
 
             <div class="grid-container">
@@ -141,11 +153,11 @@ while ($row = $res_avail->fetch_assoc()) {
                         <tr>
                             <th class="court-col">Court</th>
                             <?php
-                            $start_hour = 9; 
-                            $end_hour = 22; // Show a slightly shorter range for dashboard
+                            $start_hour = 9;
+                            $end_hour = 21; // Standard range
                             for ($h = $start_hour; $h <= $end_hour; $h++) {
                                 $display_time = date('g a', strtotime("$h:00"));
-                                echo "<th style='font-size: 0.8em; padding: 5px;'>$display_time</th>";
+                                echo "<th style='font-size: 0.8em;'>$display_time</th>";    
                             }
                             ?>
                         </tr>
@@ -157,12 +169,12 @@ while ($row = $res_avail->fetch_assoc()) {
                             $court_id = $court['court_id'];
                             $court_num = $court['court_number'];
                             echo "<tr>";
-                            echo "<td class='court-col' style='padding: 5px;'>Court $court_num</td>";
+                            echo "<td class='court-col' style='font-weight: 600; font-size: 13px;'>Court $court_num</td>";     
                             for ($h = $start_hour; $h <= $end_hour; $h++) {
                                 if (isset($booked_slots[$court_id][$h])) {
-                                    echo "<td class='status-booked' style='padding: 5px;'></td>";
+                                    echo "<td class='status-booked'></td>";
                                 } else {
-                                    echo "<td class='status-available' style='padding: 5px;'></td>";
+                                    echo "<td class='status-available'></td>";      
                                 }
                             }
                             echo "</tr>";
